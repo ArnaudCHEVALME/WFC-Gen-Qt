@@ -11,8 +11,7 @@
 
 class RulesWindow : public QMainWindow {
 public:
-    RulesWindow(QWidget *parent = nullptr, std::unordered_map<const QImage *, Rule *> *rules = nullptr);
-    RulesWindow(std::unordered_map<const QImage *, Rule *> *rules = nullptr);
+    void setRules(std::unordered_map<const QImage *, Rule *>* rules);
 };
 
 

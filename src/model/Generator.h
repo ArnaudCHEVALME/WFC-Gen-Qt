@@ -25,6 +25,7 @@ private:
     Direction getOpposite(Direction dir);
 
     Direction fromCoords(int row, int col);
+
 private slots:
 
     void generateImg();
@@ -38,17 +39,18 @@ public:
 
     void createRotations();
 
-    std::unordered_map<const QImage *, Rule *> getRules();
-
     void createRulesByColor();
 
     void createRulesCustom();
 
     void generate();
 
-    void propagate(std::pair<int, int> tileCoords, std::set<std::pair<int, int>>& visited);
+    void propagate(std::pair<int, int> tileCoords, std::set<std::pair<int, int>> &visited);
 
     QImage getOutputImg();
+
+    std::unordered_map<const QImage *, Rule *> *getRules();
+
 
 };
 

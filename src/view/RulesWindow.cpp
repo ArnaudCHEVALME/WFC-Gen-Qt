@@ -6,8 +6,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include "RulesWindow.h"
+#include <QDebug>
 
-RulesWindow::RulesWindow(QWidget *parent, std::unordered_map<const QImage *, Rule *> *rules) {
+void RulesWindow::setRules(std::unordered_map<const QImage *, Rule *> *rules) {
     setWindowTitle("Rules");
     auto *scrollArea = new QScrollArea(this);
     auto *rulesScrollWidget = new QWidget(scrollArea);
@@ -66,9 +67,4 @@ RulesWindow::RulesWindow(QWidget *parent, std::unordered_map<const QImage *, Rul
 
     scrollArea->setWidgetResizable(true);
     setCentralWidget(scrollArea);
-    show();
-}
-
-RulesWindow::RulesWindow(std::unordered_map<const QImage *, Rule *> *rules) {
-    RulesWindow(nullptr, rules);
 }

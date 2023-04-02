@@ -40,5 +40,5 @@ MainWidget::MainWidget(QWidget *parent) {
 
 void MainWidget::displayResults(const QImage& result) {
     viewWidget->scene()->clear();
-    viewWidget->scene()->addPixmap(QPixmap::fromImage(result).scaled(viewWidget->size(), Qt::KeepAspectRatio));
+    viewWidget->scene()->addPixmap(QPixmap::fromImage(result).scaledToWidth(viewWidget->width()-5));
 }

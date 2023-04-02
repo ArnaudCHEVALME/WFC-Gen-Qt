@@ -11,7 +11,7 @@
 #include <QMainWindow>
 #include "PatternWidget.h"
 #include "../model/Generator.h"
-
+#include "RulesWindow.h"
 
 
 PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
@@ -23,6 +23,7 @@ PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
     auto *layout = new QVBoxLayout(this);
     animationCheckBox = new QCheckBox("Show animation", this);
     animationCheckBox->setDisabled(true);
+    rulesCheckBox = new QCheckBox("Show rules", this);
     openBtn = new QPushButton("Import file", this);
     wInput = new QSpinBox(this);
     wInput->setMinimum(2);
@@ -61,12 +62,15 @@ PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
     hHorizontalLayout->addWidget(new QLabel("Hauteur output"));
     hHorizontalLayout->addWidget(hInput);
 
+
+
     layout->addWidget(openBtn);
     layout->addLayout(wHorizontalLayout);
     layout->addLayout(hHorizontalLayout);
     layout->addWidget(colorRuleRadioBtn);
     layout->addWidget(customRuleRadioBtn);
     layout->addWidget(animationCheckBox);
+    layout->addWidget(rulesCheckBox);
     layout->addWidget(inputPreviewScrollArea);
     layout->addWidget(generateBtn);
 
@@ -114,12 +118,24 @@ void PatternWidget::openImages() {
     }
 }
 
+
+
 void PatternWidget::generateImg() {
+    if (srcImgs.size() == 0) {
+        QMessageBox::warning(this, "Erreur", "Vous devez sélectionner au moins deux images !");
+        return;
+    }
     auto generator = Generator(&srcImgs, wInput->value(), hInput->value());
 
     generator.createRotations();
     generator.createRulesByColor();
     generator.generate();
+
+    if (rulesCheckBox->isChecked()) {
+        auto * rulesWindow = new RulesWindow();
+        rulesWindow->setRules(generator.getRules());
+        rulesWindow->show();
+    }
 
     emit imgGenerated(generator.getOutputImg());
 }

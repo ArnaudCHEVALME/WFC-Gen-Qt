@@ -23,6 +23,7 @@ private:
     QSpinBox *hInput;
     QPushButton *generateBtn;
     QCheckBox *animationCheckBox;
+    QCheckBox *rulesCheckBox;
     QRadioButton *colorRuleRadioBtn;
     QRadioButton *customRuleRadioBtn;
 public:

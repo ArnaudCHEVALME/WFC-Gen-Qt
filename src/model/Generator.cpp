@@ -140,8 +140,6 @@ void Generator::createRulesByColor() {
         rules->insert(std::pair<const QImage *, Rule *>(img0, rule));
 
     }
-
-    auto rulesWindow = RulesWindow(rules);
 }
 
 void Generator::createRotations() {
@@ -270,8 +268,8 @@ Direction Generator::fromCoords(int row, int col) {
     }
 }
 
-std::unordered_map<const QImage *, Rule *> Generator::getRules() {
-    return *rules;
+std::unordered_map<const QImage *, Rule *>* Generator::getRules() {
+    return rules;
 }
 
 void Generator::generateImg() {
