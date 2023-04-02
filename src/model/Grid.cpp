@@ -4,7 +4,7 @@
 
 #include <QPainter>
 #include "Grid.h"
-#include <QDebug>
+
 
 int random_int(int min, int max) {
     std::random_device rd;
@@ -98,7 +98,7 @@ bool Grid::imgToKeep(int row, int col, std::vector<const QImage *> *toKeep) {
 
     // Check if anything was removed from the vector
     if (possibleImages.size() == 0) {
-        qDebug() << "No images left to keep for " << row << ", " << col;
+
 //        exit(1);
     }
 

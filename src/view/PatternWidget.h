@@ -14,16 +14,17 @@
 #include "InputImgPreview.h"
 
 class PatternWidget : public QWidget {
+Q_OBJECT
 private:
     QPushButton *openBtn;
     std::vector<const QImage *> srcImgs;
-    QGridLayout * inputImgPreviewLayout;
+    QGridLayout *inputImgPreviewLayout;
     QSpinBox *wInput;
     QSpinBox *hInput;
     QPushButton *generateBtn;
     QCheckBox *animationCheckBox;
-    QRadioButton * colorRuleRadioBtn;
-    QRadioButton * customRuleRadioBtn;
+    QRadioButton *colorRuleRadioBtn;
+    QRadioButton *customRuleRadioBtn;
 public:
     explicit PatternWidget(QWidget *parent = nullptr);
 
@@ -32,6 +33,10 @@ private slots:
     void openImages();
 
     void generateImg();
+
+signals:
+
+    void imgGenerated(const QImage &result);
 };
 
 

@@ -12,7 +12,7 @@
 #include "PatternWidget.h"
 #include "../model/Generator.h"
 
-#include "QDebug"
+
 
 PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
 
@@ -121,11 +121,5 @@ void PatternWidget::generateImg() {
     generator.createRulesByColor();
     generator.generate();
 
-    auto out = generator.getOutputImg();
-    auto w = new QMainWindow();
-    auto imgPreview = new QLabel(w);
-    imgPreview->setPixmap(QPixmap::fromImage(out));
-    imgPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    w->setCentralWidget(imgPreview);
-    w->show();
+    emit imgGenerated(generator.getOutputImg());
 }

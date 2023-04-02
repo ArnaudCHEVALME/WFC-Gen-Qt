@@ -3,7 +3,7 @@
 //
 
 #include "Rule.h"
-#include <QDebug>
+
 
 Rule::Rule( const QImage *img) {
     this->image = img;

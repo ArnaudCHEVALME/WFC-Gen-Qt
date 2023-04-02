@@ -1,7 +1,7 @@
 #include "Generator.h"
 #include "Grid.h"
 #include "../view/RulesWindow.h"
-#include <QDebug>
+
 #include <iostream>
 #include <stack>
 #include <set>
@@ -36,7 +36,7 @@ Generator::Generator(std::vector<const QImage *> *imgsSrc) {
 void Generator::createRulesByColor() {
     for (int i = 0; i < imgsSrc->size(); i++) {
         auto img0 = imgsSrc->at(i);
-        qDebug() << "create rules for image " << img0;
+
         Rule *rule = new Rule(img0);
         for (int j = 0; j < imgsSrc->size(); j++) {
             auto img1 = imgsSrc->at(j);
@@ -117,13 +117,13 @@ void Generator::createRulesByColor() {
                 }
 
                 // prints the coordinates variable
-//                qDebug() << "middle : " << x0Middle << ", " << y0Middle << ", " << x1Middle << ", " << y1Middle;
-//                qDebug() << "corner0 : " << x0Corner0 << ", " << y0Corner0 << ", " << x1Corner0 << ", " << y1Corner0;
-//                qDebug() << "corner1 : " << x0Corner1 << ", " << y0Corner1 << ", " << x1Corner1 << ", " << y1Corner1;
 
-//                qDebug() << "Middle : " << img0->pixelColor(x0Middle, y0Middle) << ", " << img1->pixelColor(x1Middle, y1Middle) << (img0->pixelColor(x0Middle, y0Middle) == img1->pixelColor(x1Middle, y1Middle));
-//                qDebug() << "Corner0 : " << img0->pixelColor(x0Corner0, y0Corner0) << ", " << img1->pixelColor(x1Corner0, y1Corner0);
-//                qDebug() << "Corner1 : " << img0->pixelColor(x0Corner1, y0Corner1) << ", " << img1->pixelColor(x1Corner1, y1Corner1);
+
+
+
+
+
+
 
 
                 // check if the images share the same colors in the corresponding directions
@@ -132,28 +132,28 @@ void Generator::createRulesByColor() {
                     img0->pixelColor(x0Corner1, y0Corner1) == img1->pixelColor(x1Corner1, y1Corner1)) {
 
                     rule->addRule(dir, img1);
-                    qDebug() << "Rule added : " << dir << " -> " << img1;
+
                 }
             }
         }
         // add the rule to the map of rules
         rules->insert(std::pair<const QImage *, Rule *>(img0, rule));
-        qDebug() << "Rule added to the map : " << rules->size();
+
     }
 
     auto rulesWindow = RulesWindow(rules);
 }
 
 void Generator::createRotations() {
-    qDebug() << "Creating rotations... : current = " << imgsSrc->size();
+
     auto *rotations = new std::vector<const QImage *>();
     for (const auto &img: *imgsSrc) {
-        qDebug() << "Rotating image : " << img;
+
         for (int i = 1; i < 4; i++) {
             // rotate the image
             auto imgR = new QImage(img->transformed(QTransform().rotate(90 * i)));
             if (imgR->isNull()) {
-                qDebug() << "Error rotating image : " << i * 90;
+
             }
 
             // check if the rotation already exists in imgSrc
@@ -180,9 +180,9 @@ void Generator::createRotations() {
         }
     }
     imgsSrc->insert(imgsSrc->end(), rotations->begin(), rotations->end());
-    qDebug() << "Rotations added : " << rotations->size();
+
     delete rotations;
-    qDebug() << "Total imgs : " << imgsSrc->size();
+
 }
 
 void Generator::generate() {
@@ -198,10 +198,10 @@ void Generator::generate() {
             tileCoords = grid.collapseRandomTile();
         else
             grid.collapse(tileCoords);
-        qDebug() << "Tile coords : " << tileCoords.first << ", " << tileCoords.second;
-        qDebug() << "Possible imgs : " << grid.getPossibleImages(tileCoords);
+
+
         if (grid.getPossibleImages(tileCoords).size() == 0) {
-            qDebug() << "No possible images !";
+
             exit(1);
         }
 
@@ -209,11 +209,11 @@ void Generator::generate() {
         std::set<std::pair<int, int>> visited;
         propagate(tileCoords, visited);
     }
-    qDebug() << "Generation finished !";
+
 }
 
 void Generator::propagate(std::pair<int, int> tileCoords, std::set<std::pair<int, int>> &visited) {
-    qDebug() << "start propagation";
+
     visited.insert(tileCoords);
     for (auto collapsedImg: grid.getPossibleImages(tileCoords)) {
         for (int row = -1; row <= 1; row++) {
@@ -232,9 +232,9 @@ void Generator::propagate(std::pair<int, int> tileCoords, std::set<std::pair<int
 
                 if (visited.find(neighbourCoords) ==
                     visited.end()) {  // check if neighbour has not been visited before
-                    qDebug() << "Current tile : " << tileCoords.first << ", " << tileCoords.second;
-                    qDebug() << "Neighbour tile : " << neighbourCoords.first << ", " << neighbourCoords.second;
-                    qDebug() << "Direction : " << dir;
+
+
+
                     bool changed = grid.imgToKeep(neighbourCoords, validNeighbours);
                     if (changed)
                         propagate(neighbourCoords, visited);

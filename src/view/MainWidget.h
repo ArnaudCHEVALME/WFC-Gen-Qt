@@ -17,6 +17,8 @@ private:
     PatternWidget *patternWidget;
     QGraphicsView *viewWidget;
 
+    void displayResults(const QImage& result);
+
 public :
     explicit MainWidget(QWidget *parent = nullptr);
 };

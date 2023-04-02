@@ -6,6 +6,7 @@
 #include <QGraphicsPixmapItem>
 #include "MainWidget.h"
 
+
 MainWidget::MainWidget(QWidget *parent) {
     setWindowTitle("WFC Image generator");
     setWindowIcon(QIcon("../icon.png"));
@@ -33,5 +34,11 @@ MainWidget::MainWidget(QWidget *parent) {
     layout->addWidget(viewWidget);
 
     setLayout(layout);
-//        patternWidget->show();
+
+    connect(patternWidget, &PatternWidget::imgGenerated, this, &MainWidget::displayResults);
+}
+
+void MainWidget::displayResults(const QImage& result) {
+    viewWidget->scene()->clear();
+    viewWidget->scene()->addPixmap(QPixmap::fromImage(result).scaled(viewWidget->size(), Qt::KeepAspectRatio));
 }
