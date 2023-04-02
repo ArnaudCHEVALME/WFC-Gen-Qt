@@ -3,18 +3,26 @@
 //
 
 #include "Rule.h"
+#include <QDebug>
 
 Rule::Rule( const QImage *img) {
     this->image = img;
 }
 
 void Rule::addRule(Direction dir, const QImage *img) {
-    if (std::find(rules.at(dir)->begin(), rules.at(dir)->end(), img) == rules.at(dir)->end()) {
-        rules.at(dir)->push_back(img);
+    if (rules.count(dir) == 0) {
+        rules[dir] = new std::vector<const QImage *>();
+    }
+    if (std::find(rules[dir]->begin(), rules[dir]->end(), img) == rules[dir]->end()) {
+        rules[dir]->push_back(img);
     }
 }
 
+
 void Rule::removeRule(Direction dir, const QImage *img) {
+    if (rules.count(dir) == 0) {
+        rules[dir] = new std::vector<const QImage *>();
+    }
     if (std::find(rules.at(dir)->begin(), rules.at(dir)->end(), img) != rules.at(dir)->end()) {
         rules.at(dir)->erase(std::remove(rules.at(dir)->begin(), rules.at(dir)->end(), img), rules.at(dir)->end());
     }

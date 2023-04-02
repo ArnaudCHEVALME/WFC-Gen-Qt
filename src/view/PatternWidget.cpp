@@ -8,7 +8,11 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QScrollArea>
+#include <QMainWindow>
 #include "PatternWidget.h"
+#include "../model/Generator.h"
+
+#include "QDebug"
 
 PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
 
@@ -18,11 +22,18 @@ PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
 
     auto *layout = new QVBoxLayout(this);
     animationCheckBox = new QCheckBox("Show animation", this);
+    animationCheckBox->setDisabled(true);
     openBtn = new QPushButton("Import file", this);
-    nInput = new QSpinBox(this);
-    nInput->setMinimum(2);
-    nInput->setMaximum(5);
-    nInput->setMaximumWidth(40);
+    wInput = new QSpinBox(this);
+    wInput->setMinimum(2);
+    wInput->setMaximum(100);
+
+    hInput = new QSpinBox(this);
+    hInput->setMinimum(2);
+    hInput->setMaximum(100);
+
+    wInput->setMaximumWidth(60);
+    hInput->setMaximumWidth(60);
 
     // add a layout to display images selected in a grid inside a scroll area
     auto * inputPreviewScrollArea = new QScrollArea(this);
@@ -40,13 +51,19 @@ PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
     customRuleRadioBtn = new QRadioButton("Règles personalisées", this);
     customRuleRadioBtn->setDisabled(true);
 
-    auto *horizontalLayout = new QHBoxLayout();
+    auto *wHorizontalLayout = new QHBoxLayout();
 
-    horizontalLayout->addWidget(new QLabel("Taille des patterns"));
-    horizontalLayout->addWidget(nInput);
+    wHorizontalLayout->addWidget(new QLabel("Largeur output"));
+    wHorizontalLayout->addWidget(wInput);
+
+    auto * hHorizontalLayout = new QHBoxLayout();
+
+    hHorizontalLayout->addWidget(new QLabel("Hauteur output"));
+    hHorizontalLayout->addWidget(hInput);
 
     layout->addWidget(openBtn);
-    layout->addLayout(horizontalLayout);
+    layout->addLayout(wHorizontalLayout);
+    layout->addLayout(hHorizontalLayout);
     layout->addWidget(colorRuleRadioBtn);
     layout->addWidget(customRuleRadioBtn);
     layout->addWidget(animationCheckBox);
@@ -59,6 +76,7 @@ PatternWidget::PatternWidget(QWidget *parent) : QWidget(parent) {
 
     // Connect the button's clicked() signal to a slot function
     connect(openBtn, &QPushButton::clicked, this, &PatternWidget::openImages);
+    connect(generateBtn, &QPushButton::clicked, this, &PatternWidget::generateImg);
 }
 
 void PatternWidget::openImages() {
@@ -70,17 +88,17 @@ void PatternWidget::openImages() {
         QMessageBox::warning(this, "Erreur", "Vous devez sélectionner au moins deux images !");
         return;
     }
-
     // loop through all the selected files, add them to the list and check if they all have the same dimensions
-    auto img0 = QImage(fileNames[0]);
+    auto img0 = new QImage(fileNames[0]);
+
     srcImgs.push_back(img0);
 
-    int w = srcImgs[0].width();
-    int h = srcImgs[0].height();
+    int d = srcImgs[0]->width();
 
     for (int i = 1; i < fileNames.size(); i++) {
-        auto img = QImage(fileNames[i]);
-        if (img.height() != h || img.width() != w) {
+        auto img = new QImage(fileNames[i]);
+
+        if (img->height() != d || img->width() != d) {
             // toutes les images n'ont pas les mêmes dimensions
             QMessageBox::warning(this, "Erreur", "Les images doivent avoir les mêmes dimensions !");
             return;
@@ -92,7 +110,22 @@ void PatternWidget::openImages() {
     for (int i = 0; i < srcImgs.size(); i++) {
         auto *imgPreview = new InputImgPreview(this);
         imgPreview->setPixmap(fileNames[i]);
-        inputImgPreviewLayout->addWidget(imgPreview, i / 3, i % 3);
+        inputImgPreviewLayout->addWidget(imgPreview, i / 5, i % 5);
     }
+}
 
+void PatternWidget::generateImg() {
+    auto generator = Generator(&srcImgs, wInput->value(), hInput->value());
+
+    generator.createRotations();
+    generator.createRulesByColor();
+    generator.generate();
+
+    auto out = generator.getOutputImg();
+    auto w = new QMainWindow();
+    auto imgPreview = new QLabel(w);
+    imgPreview->setPixmap(QPixmap::fromImage(out));
+    imgPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    w->setCentralWidget(imgPreview);
+    w->show();
 }

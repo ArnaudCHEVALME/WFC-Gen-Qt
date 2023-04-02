@@ -16,9 +16,10 @@
 class PatternWidget : public QWidget {
 private:
     QPushButton *openBtn;
-    std::vector<QImage> srcImgs;
+    std::vector<const QImage *> srcImgs;
     QGridLayout * inputImgPreviewLayout;
-    QSpinBox *nInput;
+    QSpinBox *wInput;
+    QSpinBox *hInput;
     QPushButton *generateBtn;
     QCheckBox *animationCheckBox;
     QRadioButton * colorRuleRadioBtn;
@@ -29,6 +30,8 @@ public:
 private slots:
 
     void openImages();
+
+    void generateImg();
 };
 
 

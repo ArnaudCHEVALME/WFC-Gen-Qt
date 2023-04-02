@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include <QImage>
-#include "../Utils/Direction.h"
+#include "Utils/Direction.h"
 
 class Rule {
 private:
@@ -20,7 +20,7 @@ public:
 
     void addRule(Direction dir, const QImage *img);
 
-    void removeRule(Direction dir,const QImage *img);
+    void removeRule(Direction dir, const QImage *img);
 
     std::vector<const QImage *> *getImgInDir(Direction dir);
 

@@ -13,7 +13,7 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(WFC_Image_Generator main.cpp src/view/PatternWidget.cpp src/view/PatternWidget.h src/model/Generator.cpp src/model/Generator.h src/view/MainWidget.cpp src/view/MainWidget.h src/view/InputImgPreview.cpp src/view/InputImgPreview.h src/model/Utils/vec2D.h src/model/Utils/Direction.h src/model/Rule/Rule.cpp src/model/Rule/Rule.h)
+add_executable(WFC_Image_Generator main.cpp src/view/PatternWidget.cpp src/view/PatternWidget.h src/model/Generator.cpp src/model/Generator.h src/view/MainWidget.cpp src/view/MainWidget.h src/view/InputImgPreview.cpp src/view/InputImgPreview.h src/model/Utils/vec2D.h src/model/Utils/Direction.h src/model/Rule.cpp src/model/Rule.h src/model/Grid.cpp src/model/Grid.h src/view/RulesWindow.cpp src/view/RulesWindow.h)
 target_link_libraries(WFC_Image_Generator
         Qt5::Core
         Qt5::Gui
